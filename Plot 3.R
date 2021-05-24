@@ -1,0 +1,16 @@
+library(readr)
+library(lubridate)
+library(dplyr)
+setwd("~/Coursera/DataScience JHU/Exploratory Data Analysis/Week 1/ExData_Plotting1")
+dat <- read.table("household_power_consumption.txt", header = T, sep = ";", comment.char = "%", stringsAsFactors = FALSE, na.strings = "?")
+dat$Date <- dmy(dat$Date)
+dat <- dat %>% filter(Date == "2007-02-01" | Date == "2007-02-02")
+
+#plot3
+datetime <- transform(dat, timestamp=as.POSIXct(paste(Date, Time)), "%d/%m/%Y %H:%M:%S")
+plot(datetime$timestamp, datetime$Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering")
+lines(datetime$timestamp, datetime$Sub_metering_2, col = "red")
+lines(datetime$timestamp, datetime$Sub_metering_3, col = "blue")
+legend("topright", col = c("black", "red", "blue"), c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty = c(1,1), lwd = c(1,1), cex = 0.6)
+dev.copy(png, file = "plot3.png", height = 480, width = 480)
+dev.off()
